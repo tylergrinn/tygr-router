@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function TG() {
+export default function Logo() {
   return (
     <div className="tygr-logo">
       <svg

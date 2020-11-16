@@ -1,3 +1,5 @@
+#!/bin/sh
+
 read -p 'NPM Package [@tygr/logo] : ' npmPackage
 read -p 'Github repository [tylergrinn/tygr-logo] : ' repository
 read -p 'Package name [tygr-logo] : ' package
@@ -28,17 +30,17 @@ for f in 'package.json' '.travis.yml'; do
 done
 
 # PACKAGE
-for f in 'webpack.config.js' 'package.json' 'README.md' 'demo/browser.html' 'demo/*.ts*'; do
+for f in 'webpack.config.js' 'package.json' 'README.md' 'demo/template.html' 'demo/*.ts*'; do
   sed -i "s;tygr-logo;$package;g" $f
 done
 
 # LIBRARY
-for f in 'README.md' 'webpack.config.js' 'demo/browser.html'; do
+for f in 'README.md' 'webpack.config.js' 'demo/template.html'; do
   sed -i "s;TygrLogo;$library;g" $f
 done
 
 # NPM PACKAGE
-for f in 'package.json' 'README.md' '.travis.yml' 'deploy.sh'; do
+for f in 'package.json' 'README.md' '.travis.yml'; do
   sed -i "s;@tygr/logo;$npmPackage;g" $f
 done
 
@@ -46,8 +48,8 @@ done
 sed -i "s;Logo for tygr;$description;g" package.json
 
 # COMMON NAME
-for f in 'README' 'demo/template.html' 'demo/webpack.config.js'; do
-  sed -i "s;TyGr Logo;$common;g" demo/*.html
+for f in 'README.md' 'demo/template.html' 'demo/webpack.config.js'; do
+  sed -i "s;TyGr Logo;$common;g" $f
 done
 
 rm setup.sh
