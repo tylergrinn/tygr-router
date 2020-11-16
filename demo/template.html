@@ -2,7 +2,7 @@
 <html lang="en-us">
   <head>
     <meta charset="utf-8" />
-    <title>TyGr Logo Browser Demo</title>
+    <title>TyGr Logo browser demo</title>
     <meta name="description" content="Login component for TyGr" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -10,8 +10,8 @@
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <script src="../tygr-logo.min.js"></script>
-    <link rel="stylesheet" href="../tygr-logo.min.css" />
+    <script browser src="lib/tygr-logo.min.js"></script>
+    <link browser rel="stylesheet" href="lib/tygr-logo.min.css" />
     <style>
       html,
       body,
@@ -45,7 +45,10 @@
         color: grey;
       }
 
-      #header a.selected {
+      [env='node'] [href='node.html'],
+      [env='browser'] [href='browser.html'],
+      [env='standalone'] [href='standalone.html'],
+      [env='sass'] [href='sass.html'] {
         background-color: white;
       }
     </style>
@@ -53,13 +56,21 @@
   <body>
     <div id="header">
       <a href="node.html">Node</a>
-      <a href="browser.html" class="selected">Browser</a>
+      <a href="browser.html">Browser</a>
       <a href="standalone.html">Standalone</a>
       <a href="sass.html">Sass</a>
     </div>
+    <script>
+      window.addEventListener('load', () => {
+        document
+          .getElementById('header')
+          .setAttribute('env', location.pathname.match(/\/(.*).html$/)[1]);
+      });
+    </script>
 
     <div id="app"></div>
-    <script type="text/babel">
+
+    <script browser type="text/babel">
       ReactDOM.render(<TygrLogo />, document.getElementById('app'));
     </script>
   </body>

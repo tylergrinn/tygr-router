@@ -1,11 +1,12 @@
 {
   "name": "@tygr/logo",
-  "version": "1.1.4",
+  "version": "2.0.0",
   "description": "Logo for tygr",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib"
+    "lib",
+    "sass"
   ],
   "browserslist": [
     "defaults"
@@ -42,22 +43,20 @@
     },
     "ignorePatterns": [
       "lib/*",
-      "webpack.config.js"
+      "dist/*",
+      "webpack.config.js",
+      "html-webpack-exclude-tags-plugin.js"
     ]
   },
   "prettier": {
     "singleQuote": true
   },
   "scripts": {
-    "clean": "rimraf lib",
+    "clean": "rimraf lib dist",
     "ts": "tsc",
     "ts:w": "npm run ts -- -w",
-    "sass:compile": "sass -I node_modules --style=compressed src/styles/main.scss lib/tygr-logo.min.css",
-    "sass:compile:w": "npm run sass:compile -- --watch",
-    "sass:copy": "copyfiles -u 2 src/styles/**/* lib",
-    "sass:copy:w": "nodemon -e * -x \"npm run sass:copy\" -w src/styles",
-    "sass": "run-p sass:compile sass:copy",
-    "sass:w": "run-p sass:compile:w sass:copy:w",
+    "sass": "sass -I node_modules --style=compressed --no-source-map sass/index.scss lib/tygr-logo.min.css",
+    "sass:w": "npm run sass -- --watch",
     "webpack": "webpack",
     "webpack:w": "npm run webpack -- -w",
     "plugin": "run-p ts sass webpack",
@@ -66,8 +65,8 @@
     "demo:w": "npm run demo -- -w",
     "build": "run-s clean plugin demo",
     "serve": "http-server lib",
-    "reload": "reload --dir lib -s demo/node.html -f",
-    "start": "npm-run-all plugin -p plugin:w demo:w reload",
+    "reload": "reload -d dist -b",
+    "start": "npm-run-all build -p plugin:w demo:w reload",
     "lint:check": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "lint": "npm run lint:fix",
@@ -80,7 +79,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com/tylergrinn/tygr-logo.git"
+    "url": "https://github.com/tylergrinn/tygr-logo.git"
   },
   "keywords": [
     "react",
@@ -112,6 +111,7 @@
     "eslint-config-alloy": "^3.8.0",
     "eslint-plugin-react": "^7.21.2",
     "html-webpack-plugin": "^4.5.0",
+    "jsdom": "^16.4.0",
     "mini-css-extract-plugin": "^0.11.2",
     "nodemon": "^2.0.4",
     "npm-run-all": "^4.1.5",

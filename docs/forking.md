@@ -14,61 +14,30 @@ In other words, don't _fork a fork_ of this repository and expect the setup scri
 
 # Deployment
 
-Deployment is triggered by pushing a new git tag. Each tag requires the `"version"` field in the `package.json` file to be unique. I recommend keeping the tag and version in sync and using [semver](https://semver.org/) conventions.
-
 ## Travis CI
 
-These instructions are for Ubuntu. If on windows, you must use [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10) in order for the travis cli to work.
+After you first push, you can add environment variables to your travis repository settings:
 
-1. Setup a [travis-ci.com](https://travis-ci.com) account
+![[Travis settings](https://travis-ci.com/)](travis-settings.png 'Travis settings')
 
-2. Install the travis cli
+### NPM_TOKEN
 
-   ```
-   apt install ruby ruby-dev
-   gem install travis
-   ```
+This if for publishing automatically on npm. If you want to skip this step, remove the first item in the deploy array in the `.travis.yml` file.
 
-3. Setup npm
+Otherwise, update the `email` key in the `.travis.yml` file and create an [npm 'Automation' access token](https://www.npmjs.com/settings/~/tokens). Store the result securely and copy it to a new NPM_TOKEN environment variable.
 
-   The setup command will overwrite the `.travis.yml` file. Make a backup before continuing.
+The first time you publish must be done locally:
 
-   `travis setup npm --com --force`
+```
+npm publish
+```
 
-   Open the resulting `travis.yml` file and copy `secure` key:
+Now, for every tag on the `main` git branch, travis will automatically deploy to npm. Each tag requires the `"version"` field in the `package.json` file to be unique. I recommend keeping the tag and version in sync and using [semver](https://semver.org/) conventions.
 
-   ```yml
-   api_token:
-     secure: blahblahblahblahblahblahblahblah
-   ```
+### GITHUB_TOKEN
 
-   Replace the `secure` key in the backup of `.travis.yml` you made and discard the generated file and rename the backup to `.travis.yml`. Lastly, update the email address just above the `api_token`
+This will allow the demo to be published on github pages. If you want to skip this step, remove the second item in the deploy array in the `.travis.yml` file.
 
-   Build and deploy the package locally the first time:
+Otherwise, generate a [github token](https://github.com/settings/tokens) and add it as an environment variable.
 
-   ```
-   npm build
-   npm publish
-   ```
-
-4. Deploy via ssh
-
-   If you want to upload the built files to a server via rsync, you can do that here. Otherwise, remove entirely the `addons` and `before_deploy` top level keys in the `.travis.yml`. Also remove the second item in the `deploy` array.
-
-   Create a ssh key named deploy_rsa with an empty passphrase:\
-   `ssh-keygen -f deploy_rsa -N ''`
-
-   Let travis encrypt the file, don't overwrite `.travis.yml` if asked to do so.\
-   `travis encrypt-file --com deploy_rsa | grep "openssl.*" | cut -d" " -f3-6 `
-
-   Replace the `-K $encrypted_db2095f63ba3_key` and `-iv $encrypted_db2095f63ba3_iv` in the `before_deploy` section of the `.travis.yml` with the output from the previous command.
-
-   In the `.travis.yml` file, update the `ssh_known_hosts` near the top and the `script` on the last line to push the generated `lib` directory wherever you want.
-
-   Append the `deploy_rsa.pub` key to the authorized_keys file on the server you are pushing to.
-
-   ## IMPORTANT
-
-   Remove the `deploy_rsa` and `deploy_rsa.pub` files, or add them to the gitignore. Never publish them in your repository, even if it is private.
-
-   If you serve the resulting files from a static file server like nginx or apache, it will mirror [unpkg](https://unpkg.com/@tygr/logo@1.1.2/lib/demo/index.html) and allow your component to be downloaded by other web pages. See [tygr.info/download/@tygr/logo/lib/demo](https://tygr.info/download/@tygr/logo/lib/demo)
+Now, each push to the main branch will deploy the demo website to github pages.

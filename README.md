@@ -133,5 +133,5 @@ Make sure to reassign any sass variables before importing the `main.scss` file:
 $accent-1: white;
 $accent-2: yellow;
 
-@import '@tygr/logo/lib/main';
+@import '@tygr/logo/sass';
 ```

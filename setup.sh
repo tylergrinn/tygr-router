@@ -38,7 +38,7 @@ for f in 'README.md' 'webpack.config.js' 'demo/browser.html'; do
 done
 
 # NPM PACKAGE
-for f in 'package.json' 'README.md' '.travis.yml'; do
+for f in 'package.json' 'README.md' '.travis.yml' 'deploy.sh'; do
   sed -i "s;@tygr/logo;$npmPackage;g" $f
 done
 
@@ -46,6 +46,8 @@ done
 sed -i "s;Logo for tygr;$description;g" package.json
 
 # COMMON NAME
-for f in 'README' 'demo/*.html'; do
+for f in 'README' 'demo/template.html' 'demo/webpack.config.js'; do
   sed -i "s;TyGr Logo;$common;g" demo/*.html
 done
+
+rm setup.sh
