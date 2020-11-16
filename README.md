@@ -1,6 +1,6 @@
 # Tygr Logo
 
-[Demo](https://tygr.info/download/@tygr/logo/lib/demo)
+[Demo](https://tylergrinn.github.io/tygr-logo/node.html)
 
 [Forking Guide](docs/forking.md)
 
@@ -52,10 +52,10 @@ When included via script tag, the component is exposed as a window library named
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <script src="https://tygr.info/download/@tygr/logo/lib/tygr-logo.min.js"></script>
+    <script src="https://tylergrinn.github.io/tygr-logo/lib/tygr-logo.min.js"></script>
     <link
       rel="stylesheet"
-      href="https://tygr.info/download/@tygr/logo/lib/tygr-logo.min.css"
+      href="https://tylergrinn.github.io/tygr-logo/lib/tygr-logo.min.css"
     />
   </head>
   <body>
@@ -125,9 +125,9 @@ You should not use the standalone version if you have multiple react components 
 
 ## Customizing styles
 
-Sass variables can be overridden if you accept responsibility for transpiling it into css. You can see an example of this setup in the `webpack.config.demo.js` configuration named `sass`.
+Sass variables can be overridden if you accept responsibility for transpiling it into css. You can see an example of this setup in the `demo/webpack.config.js` configuration named `sass`.
 
-Make sure to reassign any sass variables before importing the `main.scss` file:
+Make sure to reassign any sass variables before importing the `sass` library:
 
 ```scss
 $accent-1: white;
