@@ -1,6 +1,6 @@
 # Tygr Logo
 
-[Demo](https://tylergrinn.github.io/tygr-logo/node.html)
+[Demo](https://tylergrinn.github.io/tygr-logo)
 
 [Forking Guide](docs/forking.md)
 
