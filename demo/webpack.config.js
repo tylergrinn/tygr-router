@@ -15,7 +15,7 @@ const common = {
     path: path.join(__dirname, '..', 'dist'),
     filename: '[name].[contenthash].js',
   },
-  mode: 'development',
+  mode: PROD ? 'production' : 'development',
   module: {
     rules: [
       {
