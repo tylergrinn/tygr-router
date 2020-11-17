@@ -64,7 +64,7 @@
       window.addEventListener('load', () => {
         document
           .getElementById('header')
-          .setAttribute('env', location.pathname.match(/\/(.*).html$/)[1]);
+          .setAttribute('env', location.pathname.match(/\/([^\/]*.).html$/)[1]);
       });
     </script>
 
