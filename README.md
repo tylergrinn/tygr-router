@@ -2,7 +2,7 @@
 
 [Demo](https://tylergrinn.github.io/tygr-logo)
 
-[Forking Guide](docs/forking.md)
+[Forking Guide](https://github.com/tylergrinn/tygr-logo/blob/main/docs/forking.md)
 
 This is a react component packaged for three environments: node, browser, and standalone.
 

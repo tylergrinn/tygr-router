@@ -3,10 +3,6 @@ dist: xenial
 language: node_js
 node_js: lts/*
 
-# SSH Setup
-addons:
-  ssh_known_hosts: tygr.info
-
 script:
   - npm run quality:check
   - NODE_ENV=production npm run build
