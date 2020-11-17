@@ -19,8 +19,7 @@ deploy:
       repo: tylergrinn/tygr-logo
     edge: true
     email: tylergrinn@gmail.com
-    api_token:
-      secure: f6DTO2ata9F3vEl3pgL0duLtlPwHVwviVzvDgoAkQJxIIxYms4DcJIab9aCkldJxuFHcg4t9FO82nxZdlDX+Mo0qTwzEXFgoZMSxPoIxEnfPRpTOWFC3IanUUOkEXFcctyAq0cWG3YGSe8aQPfTcRhMA7bspC7L+ac76/Tv2HNkd39S96f7/JIq54vu6SHXUUzntzGxG9xNGg8BsF/gcpRC119UNaSadM9hQFPAh+vg+kU36dPnrWuynOPfAn0z5Exx72Aut9g7urAJuzTkY/USVs8v46bTRZjulr1QjrrkvEpTBllysV6H8pAHQVkl2qnbJW5UqTtzOH2tYgZx1KvX+F7WqQ+VJKpaKxjfVRLNCJ5KEuRbzK2ZvIb480ugXhlHfHoyLMWwGFRPx9niZqNDmp8aTVgtiV3uIItqH5Mj1pxh8s/GbdQe7BiduCQIw34HJiVtqtAQ0DbFQoblRKqMhozzo6e1+YYrEkC8xwInkj46rU94YMSYN8v80nn4D84WfY5eYHf7UekcJptN9xV/Aqrr3Yuru/cbwvr/bKir4+5NWC7agaAy9To1Op6at+N4J/Z1OxjcrtMhju36XgylKNAo2cv9Bhoy2XyEmjYnH08Z9ayBc/0rPttlV8vhmhXTSVzcYmT2znOQbTHazc3D84meGmp3nGc6WE/ppHA8=
+    api_token: $NPM_TOKEN
 
   - provider: pages
     on:

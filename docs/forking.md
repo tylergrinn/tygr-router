@@ -38,6 +38,6 @@ Now, for every tag on the `main` git branch, travis will automatically deploy to
 
 This will allow the demo to be published on github pages. If you want to skip this step, remove the second item in the deploy array in the `.travis.yml` file.
 
-Otherwise, generate a [github token](https://github.com/settings/tokens) and add it as an environment variable.
+Otherwise, generate a [github token](https://github.com/settings/tokens) and add it as a bew GITHUB_TOKEN environment variable. You may restrict this variable to only the main branch.
 
 Now, each push to the main branch will deploy the demo website to github pages.
