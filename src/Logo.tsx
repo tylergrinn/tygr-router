@@ -1,6 +1,12 @@
 import React from 'react';
 
-export default function Logo() {
+interface LogoProps {
+  header?: string;
+}
+
+export default function Logo(props: LogoProps) {
+  const header = props.header || 'Tyler J Grinn';
+
   return (
     <div className="tygr-logo">
       <svg
@@ -18,7 +24,7 @@ export default function Logo() {
           d="M647,83.5l-550.16-1H39.71C-288,79.5,434,598.5,473,454.5c4.06-23.88,9-56.69,13-96,7.11-70.09,2.88-79.38,0-84-27.44-44-171.07-12.12-195,1-93,51,208.33,247.51,335,190C732.93,417,854,80.5,647,83.5Z"
         />
       </svg>
-      <h3>Tyler J Grinn</h3>
+      <h3>{header}</h3>
     </div>
   );
 }
