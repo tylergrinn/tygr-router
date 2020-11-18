@@ -22,7 +22,7 @@ After you first push, you can add environment variables to your travis repositor
 
 ### NPM_TOKEN
 
-This if for publishing automatically on npm. If you want to skip this step, remove the first item in the deploy array in the `.travis.yml` file.
+This is for publishing automatically on npm. If you want to skip this step, remove the first item in the deploy array in the `.travis.yml` file.
 
 Otherwise, update the `email` key in the `.travis.yml` file and create an [npm 'Automation' access token](https://www.npmjs.com/settings/~/tokens). Store the result securely and copy it to a new NPM_TOKEN environment variable.
 
@@ -38,6 +38,6 @@ Now, for every tag on the `main` git branch, travis will automatically deploy to
 
 This will allow the demo to be published on github pages. If you want to skip this step, remove the second item in the deploy array in the `.travis.yml` file.
 
-Otherwise, generate a [github token](https://github.com/settings/tokens) and add it as a bew GITHUB_TOKEN environment variable. You may restrict this variable to only the main branch.
+Otherwise, generate a [github token](https://github.com/settings/tokens) and add it as a new GITHUB_TOKEN environment variable. You may restrict this variable to only the main branch.
 
 Now, each push to the main branch will deploy the demo website to github pages.

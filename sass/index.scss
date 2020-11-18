@@ -1,24 +1,7 @@
 @import 'variables';
 
-@import url('https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300&display=swap');
-
 .tygr-logo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  svg {
-    z-index: 2;
-    margin-bottom: -40px;
-    margin-left: 22px;
-  }
-
-  h3 {
-    color: white;
-    margin: 0;
-    font-size: 28px;
-    font-family: Sansita Swashed, cursive;
-  }
+  overflow: visible;
 
   .cls-1,
   .cls-2 {

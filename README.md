@@ -34,8 +34,6 @@ export default function MyComponent() {
     <div>
       <h1>Logo usage example</h1>
       <Logo />
-      {/* Add a custom header*/}
-      <Logo header="LOGO!" />
     </div>
   );
 }
