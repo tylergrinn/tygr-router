@@ -12,7 +12,7 @@ deploy:
     on:
       branch: main
       tags: true
-      repo: tylergrinn/tygr-logo
+      repo: tylergrinn/tygr-router
     edge: true
     email: tylergrinn@gmail.com
     api_token: $NPM_TOKEN
@@ -20,7 +20,7 @@ deploy:
   - provider: pages
     on:
       branch: main
-      repo: tylergrinn/tygr-logo
+      repo: tylergrinn/tygr-router
     edge: true
     github_token: $GITHUB_TOKEN
     local_dir: dist

@@ -1,0 +1,53 @@
+@use 'sass:string';
+@use 'sass:list';
+@use 'sass:map';
+
+@function str-replace($string, $search, $replace: '') {
+  $index: str-index($string, $search);
+
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace +
+      str-replace(
+        str-slice($string, $index + str-length($search)),
+        $search,
+        $replace
+      );
+  }
+
+  @return $string;
+}
+
+@function str-split($string, $sep) {
+  $i: str-index($string, $sep);
+
+  @if $i {
+    $head: str-slice($string, 1, $i - 1);
+    $tail: str-slice($string, $i + 1);
+
+    @return join($head, str-split($tail, $sep));
+  }
+
+  @return ($string);
+}
+
+@function list-slice($list, $start: 1, $end: length($list)) {
+  $result: [];
+
+  @for $i from $start through $end {
+    $result: append($result, nth($list, $i));
+  }
+
+  @return $result;
+}
+
+@function list-join($list, $sep) {
+  @if length($list) < 1 {
+    @return '';
+  }
+
+  @if length($list) < 2 {
+    @return nth($list, 1);
+  }
+
+  @return nth($list, 1) + $sep + list-join(list-slice($list, 2), $sep);
+}

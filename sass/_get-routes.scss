@@ -1,0 +1,42 @@
+@use 'sass:string';
+@use 'sass:map';
+
+@function get-routes-for-page($prepend, $page) {
+  @if $page == '' {
+    @return $prepend;
+  }
+
+  @if type-of($page) == 'string' {
+    @return (quote($prepend + '/' + $page));
+  } @else {
+    $path: $prepend + '/' + map-get($page, 'path');
+
+    @if map-get($page, 'children') {
+      $routes: [];
+      @each $child in map-get($page, 'children') {
+        $routes: join($routes, get-routes-for-page($path, $child));
+      }
+      @return $routes;
+    } @else {
+      @return (quote($path));
+    }
+  }
+}
+
+@function get-routes($config) {
+  $routes: [];
+
+  @if map-get($config, 'fallback') {
+    $routes: join($routes, '/' + map-get($config, 'fallback'));
+  }
+
+  @each $page in map-get($config, 'pages') {
+    @if $page == '' {
+      $routes: join($routes, '/');
+    } @else {
+      $routes: join($routes, get-routes-for-page('', $page));
+    }
+  }
+
+  @return $routes;
+}

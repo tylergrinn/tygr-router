@@ -1,3 +1,2 @@
-import Logo from './Logo';
-
-export default Logo;
+import useRouter from './use-router';
+export default useRouter;

@@ -1,0 +1,36 @@
+{
+  "router": {
+    "fallback": "404",
+    "pages": [
+      "",
+      "page1",
+      "page2",
+      {
+        "path": "child",
+        "children": [
+          "child1",
+          "child2",
+          {
+            "path": "child",
+            "children": ["grandchild1", "grandchild2"]
+          }
+        ]
+      },
+      {
+        "path": "absolute-redirect",
+        "redirectTo": "/child/child1"
+      },
+      {
+        "path": "relative-redirect",
+        "children": [
+          {
+            "path": "",
+            "redirectTo": "child1"
+          },
+          "child1",
+          "child2"
+        ]
+      }
+    ]
+  }
+}

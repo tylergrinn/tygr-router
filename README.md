@@ -1,8 +1,8 @@
-# Tygr Logo
+# Tygr Router
 
-[Demo](https://tylergrinn.github.io/tygr-logo)
+[Demo](https://tylergrinn.github.io/tygr-router)
 
-[Forking Guide](https://github.com/tylergrinn/tygr-logo/blob/main/docs/forking.md)
+[Forking Guide](https://github.com/tylergrinn/tygr-router/blob/main/docs/forking.md)
 
 This is a react component packaged for three environments: node, browser, and standalone.
 
@@ -17,23 +17,23 @@ This is a react component packaged for three environments: node, browser, and st
 Installation:
 
 ```cmd
-npm i --save @tygr/logo
+npm i --save @tygr/router
 ```
 
 Usage (jsx):
 
 ```jsx
-import Logo from '@tygr/logo';
+import Router from '@tygr/router';
 
 // Import styles. Make sure there is a style loader specified in your
 // webpack config
-import '@tygr/logo/lib/tygr-logo.min.css';
+import '@tygr/router/lib/tygr-router.min.css';
 
 export default function MyComponent() {
   return (
     <div>
-      <h1>Logo usage example</h1>
-      <Logo />
+      <h1>Router usage example</h1>
+      <Router />
     </div>
   );
 }
@@ -43,7 +43,7 @@ export default function MyComponent() {
 
 Usage:
 
-When included via script tag, the component is exposed as a window library named 'TygrLogo'
+When included via script tag, the component is exposed as a window library named 'TygrRouter'
 
 ```html
 <html>
@@ -52,17 +52,17 @@ When included via script tag, the component is exposed as a window library named
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <script src="https://tylergrinn.github.io/tygr-logo/lib/tygr-logo.min.js"></script>
+    <script src="https://tylergrinn.github.io/tygr-router/lib/tygr-router.min.js"></script>
     <link
       rel="stylesheet"
-      href="https://tylergrinn.github.io/tygr-logo/lib/tygr-logo.min.css"
+      href="https://tylergrinn.github.io/tygr-router/lib/tygr-router.min.css"
     />
   </head>
   <body>
     <div id="app"></div>
 
     <script type="text/babel">
-      ReactDOM.render(<TygrLogo />, document.getElementById('app'));
+      ReactDOM.render(<TygrRouter />, document.getElementById('app'));
     </script>
   </body>
 </html>
@@ -73,7 +73,7 @@ When included via script tag, the component is exposed as a window library named
 Installation:
 
 ```cmd
-npm i --save @tygr/logo
+npm i --save @tygr/router
 ```
 
 Usage:
@@ -81,42 +81,42 @@ Usage:
 ```jsx
 
 // Vanilla JS
-import Logo from '@tygr/logo/lib/standalone';
+import Router from '@tygr/router/lib/standalone';
 
-const el = document.getElementById('tygr-logo');
+const el = document.getElementById('tygr-router');
 
-Logo.mount(el);
+Router.mount(el);
 
 // Vue
 <template>
 <div>
-  <div ref="tygr-logo"></div>
+  <div ref="tygr-router"></div>
 </div>
 </template>
 
 <script>
-import Logo from '@tygr/logo/lib/standalone';
+import Router from '@tygr/router/lib/standalone';
 
 export default {
   mounted() {
-    Logo.mount(this.$refs['tygr-logo']);
+    Router.mount(this.$refs['tygr-router']);
   },
 };
 </script>
 
 // Angular Typescript
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import Logo from '@tygr/logo/lib/standalone';
+import Router from '@tygr/router/lib/standalone';
 
 @Component({
   selector: 'app-root',
-  template: '<div><div #tygr-logo></div></div>',
+  template: '<div><div #tygr-router></div></div>',
 })
-export class LogoComponent  {
-  @ViewChild('tygr-logo') el: ElementRef;
+export class RouterComponent  {
+  @ViewChild('tygr-router') el: ElementRef;
 
   ngAfterViewInit() {
-    Logo.mount(this.el.nativeElement);
+    Router.mount(this.el.nativeElement);
   }
 }
 ```
@@ -133,5 +133,5 @@ Make sure to reassign any sass variables before importing the `sass` library:
 $accent-1: white;
 $accent-2: yellow;
 
-@import '@tygr/logo/sass';
+@import '@tygr/router/sass';
 ```
