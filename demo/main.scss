@@ -3,77 +3,83 @@
 @import './router.json';
 @import '../';
 
-.tygr-router {
-  .router {
-    display: flex;
-    flex-wrap: wrap;
+#app > div {
+  display: flex;
+  justify-content: center;
+}
 
-    [data-route] span,
-    span[data-route] {
-      border: 4px solid darkgreen;
-      transition: border-color 1s;
-    }
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
 
-    @include router($router) {
-      border-color: transparent;
+h1,
+h3 {
+  font-family: Helvetica, sans-serif;
+  text-align: center;
+}
 
-      & span {
-        border-color: transparent;
-      }
-    }
-  }
+button,
+nav {
+  font-family: Georgia, serif;
+}
 
+nav {
   display: flex;
   justify-content: center;
 
-  .content {
+  & > div {
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  h1,
-  h3 {
-    font-family: Helvetica, sans-serif;
-    text-align: center;
-  }
-
-  button,
-  nav {
-    font-family: Georgia, serif;
-  }
-
-  nav {
     max-width: 350px;
-    display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+button {
+  $background: lightblue;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background: none;
+  background-color: $background;
+  margin: 4px;
+  padding: 4px;
+  border-radius: 0;
+
+  &:hover {
+    background-color: darken($background, 10%);
+  }
+}
+
+span {
+  padding: 4px;
+  margin: 4px;
+}
+
+.info-box {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border: 1px solid black;
+  padding: 8px;
+  margin: 8px;
+}
+
+.router {
+  display: flex;
+  flex-wrap: wrap;
+
+  [data-route] span,
+  span[data-route] {
+    border: 4px solid darkgreen;
+    transition: border-color 1s;
   }
 
-  button {
-    $background: lightblue;
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    background: none;
-    background-color: $background;
-    margin: 4px;
-    padding: 4px;
-    border-radius: 0;
+  @include router($router) {
+    border-color: transparent;
 
-    &:hover {
-      background-color: darken($background, 10%);
+    & span {
+      border-color: transparent;
     }
-  }
-
-  span {
-    padding: 4px;
-    margin: 4px;
-  }
-
-  .info-box {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    border: 1px solid black;
-    padding: 8px;
-    margin: 8px;
   }
 }

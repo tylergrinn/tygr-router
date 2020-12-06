@@ -1,5 +1,5 @@
 import useSwitch from '@tygr/switch';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import getRoute from './get-route';
 import getRoutes from './get-routes';
 import { RouterConfig, RouterConfigObject } from './router-config';
@@ -29,7 +29,7 @@ export default function useRouter(
   };
 
   useEventListener(window, 'popstate', handleRouteChange);
-  useEffect(handleRouteChange, []);
+  useMemo(handleRouteChange, []);
 
   const goto = (pathname: string) => () => {
     const route = getRoute(config, pathname);

@@ -30,7 +30,7 @@
     @if $not {
       @return "[data-route~='~/#{nth($tokens, 1)}']";
     }
-    @return ":not([data-route~='~/#{nth($tokens, 1)}'])";
+    @return "[data-route]:not([data-route~='~/#{nth($tokens, 1)}'])";
   }
 
   $partials: partials($tokens);
@@ -46,7 +46,7 @@
     @if $not {
       $exclude: "#{$exclude} [data-route~='~/#{$partial}'] #{exclude($tailTokens, $not)}";
     } @else {
-      $exclude: "#{$exclude} :not([data-route~='~/#{$partial}']) #{exclude($tailTokens, $not)}";
+      $exclude: "#{$exclude} [data-route]:not([data-route~='~/#{$partial}']) #{exclude($tailTokens, $not)}";
     }
   }
 
@@ -76,9 +76,9 @@
     }
 
     @if $not {
-      $concat: "#{$concat}:not([data-route~='~/#{$partial}']#{concat($tailTokens, $not)})";
+      $concat: "#{$concat}[data-route~='~#{$partial}']#{concat($tailTokens)}";
     } @else {
-      $concat: "#{$concat}[data-route~='~/#{$partial}']#{concat($tailTokens, $not)}";
+      $concat: "#{$concat}:not([data-route~='~#{$partial}'])#{concat($tailTokens)}";
     }
   }
 
@@ -107,23 +107,27 @@
     );
 
   @if length($tokens) > 1 {
+    $headTokens: list-slice($tokens, 1, length($tokens) - 1);
+    $concatPartial: nth($partials, length($partials));
+
+    @if $not {
+      $selectors: $selectors +
+        "#{$prefix} > #{concat($headTokens, $not)}[data-route~='~#{$concatPartial}'],";
+    } @else {
+      $selectors: $selectors +
+        "#{$prefix} > [data-route]#{concat($headTokens, $not)}:not([data-route~='~#{$concatPartial}']),";
+    }
+
     @for $i from 2 through length($tokens) {
       $partial: nth($partials, $i);
-      $headTokens: [];
-      @if $i > 1 {
-        $headTokens: list-slice($tokens, 1, $i - 1);
-      }
+      $headTokens: list-slice($tokens, 2, $i - 1);
 
       @if $not {
         $selectors: $selectors +
           "#{$prefix} #{exclude($headTokens, $not)} [data-route~='~#{$partial}'],";
-        $selectors: $selectors +
-          "#{$prefix} > #{concat($headTokens)}[data-route~='~#{$partial}'],";
       } @else {
         $selectors: $selectors +
-          "#{$prefix} #{exclude($headTokens, $not)} [data-route]:not([data-route~='~#{$partial}']),";
-        $selectors: $selectors +
-          "#{$prefix} > [data-route]#{concat($headTokens)}:not([data-route~='~#{$partial}']),";
+          "#{$prefix} #{exclude($headTokens, $not)} [data-route~='~#{$partial}'],";
       }
     }
   }

@@ -3,22 +3,36 @@
     "fallback": "404",
     "pages": [
       "",
-      "page1",
-      "page2",
       {
-        "path": "child",
+        "path": "i",
         "children": [
-          "child1",
-          "child2",
+          "i0",
+          "i1",
           {
-            "path": "child",
-            "children": ["grandchild1", "grandchild2"]
+            "path": "j",
+            "children": [
+              "j0",
+              "j1",
+              {
+                "path": "k",
+                "children": [
+                  "k0",
+                  "k1",
+                  {
+                    "path": "l",
+                    "children": ["l0", "l1"]
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
+      "page1",
+      "page2",
       {
         "path": "absolute-redirect",
-        "redirectTo": "/child/child1"
+        "redirectTo": "/i/i0"
       },
       {
         "path": "relative-redirect",
