@@ -1,5 +1,6 @@
 @use 'sass:string';
 @use 'sass:map';
+@use 'util' as *;
 
 @function get-routes-for-page($prepend, $page) {
   @if $page == '' {
@@ -39,4 +40,21 @@
   }
 
   @return $routes;
+}
+
+@function get-parent-routes($routes) {
+  $parents: [];
+
+  @each $route in $routes {
+    $tokens: str-split($route, '/');
+    @if length($tokens) > 2 {
+      $parent: nth(partials($tokens), length($tokens) - 2);
+
+      @if not index($parents, $parent) {
+        $parents: append($parents, $parent);
+      }
+    }
+  }
+
+  @return $parents;
 }

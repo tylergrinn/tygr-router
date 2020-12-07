@@ -31,7 +31,6 @@ export default function getRoute(
     if (!page.children && !LAST) return config.fallback;
 
     if (LAST && page.children && page.children.some((p) => p.path === '')) {
-      console.log('Extra page');
       tokens.push('');
     }
 

@@ -1,7 +1,7 @@
 @use 'sass:list';
 @use 'sass:meta';
 @use 'sass/util' as *;
-@use 'sass/child-selectors' as *;
+@use 'sass/get-selectors' as *;
 @use 'sass/get-routes' as *;
 @use '@tygr/switch';
 
@@ -13,12 +13,10 @@
   }
 
   @each $route in $routes {
-    $routeEscaped: str-replace($route, '/', '__');
     $childSelectors: get-child-selectors($route);
-    $notChildSelectors: get-child-selectors($route, true);
 
     @if $childSelectors != '' {
-      &[data-route-#{$routeEscaped}] {
+      &:not([data-route-state='#{$route}']) {
         #{$childSelectors} {
           @if (content-exists()) {
             // Let mixin consumer override default inactive state styles
@@ -30,25 +28,29 @@
         }
       }
     }
+  }
 
-    @if $notChildSelectors != '' {
-      &:not([data-route-#{$routeEscaped}]) {
-        #{$notChildSelectors} {
-          @if (content-exists()) {
-            // Let mixin consumer override default inactive state styles
-            @content;
-          } @else {
-            display: none;
-            pointer-events: none;
-          }
-        }
+  $parentSelectors: '';
+  $parentRoutes: get-parent-routes($routes);
+  @each $parent in $parentRoutes {
+    $parentSelectors: $parentSelectors + get-parent-selectors($parent);
+  }
+
+  @if $parentSelectors != '' {
+    #{$parentSelectors} {
+      @if (content-exists()) {
+        // Let mixin consumer override default inactive state styles
+        @content;
+      } @else {
+        display: none;
+        pointer-events: none;
       }
     }
   }
 }
 
-@mixin route($routes...) {
-  @include switch('route', $routes...) {
+@mixin routeChild($routes...) {
+  @include switch.switchChild('route', $routes...) {
     @content;
   }
 }

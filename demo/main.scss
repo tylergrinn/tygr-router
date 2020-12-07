@@ -1,33 +1,78 @@
 @use 'sass:color';
+@use '../' as router;
 
-@import './router.json';
-@import '../';
+@import 'router.js';
+
+.router {
+  [data-route] span,
+  span[data-route],
+  .info-box[data-route] {
+    border: 4px solid darkgreen;
+    transition: border-color 1s;
+  }
+
+  @include router.router($router) {
+    border-color: transparent;
+
+    span {
+      border-color: transparent;
+    }
+
+    &.red {
+      border-color: red;
+    }
+  }
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.blue {
+  @include router.routeChild('/page2') {
+    border: 4px solid blue;
+  }
+}
 
 #app > div {
   display: flex;
   justify-content: center;
 }
 
-.content {
+.flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.flex-col {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: flex-start;
+}
+
+.max-width-md {
+  max-width: 350px;
 }
 
 h1,
-h3 {
-  font-family: Helvetica, sans-serif;
+h3,
+h4 {
+  font-family: Georgia, serif;
   text-align: center;
+  width: 100%;
 }
 
 button,
-nav {
-  font-family: Georgia, serif;
+nav,
+p {
+  font-family: Helvetica, sans-serif;
 }
 
 nav {
   display: flex;
   justify-content: center;
+  width: 100%;
 
   & > div {
     display: flex;
@@ -57,29 +102,7 @@ span {
 }
 
 .info-box {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
   border: 1px solid black;
-  padding: 8px;
-  margin: 8px;
-}
-
-.router {
-  display: flex;
-  flex-wrap: wrap;
-
-  [data-route] span,
-  span[data-route] {
-    border: 4px solid darkgreen;
-    transition: border-color 1s;
-  }
-
-  @include router($router) {
-    border-color: transparent;
-
-    & span {
-      border-color: transparent;
-    }
-  }
+  padding: 4px;
+  margin: 2px;
 }

@@ -5,9 +5,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const jsonImporter = require('node-sass-json-importer');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const webpack = require('webpack');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const PROD = process.env.NODE_ENV === 'production';
-const { GITHUB_PAGES, HTTP_SERVER } = process.env;
+const { GITHUB_PAGES, HTTP_SERVER, ANALYZE } = process.env;
 
 const HTML_FILENAME =
   PROD && (GITHUB_PAGES || HTTP_SERVER) ? '404.html' : 'index.html';
@@ -63,6 +65,17 @@ module.exports = {
       template: path.resolve(__dirname, 'index.html'),
       filename: HTML_FILENAME,
     }),
+    new webpack.DefinePlugin({
+      'process.env.BASE_URL': JSON.stringify(process.env.BASE_URL || ''),
+    }),
+    ...(ANALYZE
+      ? [
+          new BundleAnalyzerPlugin({
+            analyzerMode: 'static',
+            openAnalyzer: false,
+          }),
+        ]
+      : []),
   ],
   devServer: {
     historyApiFallback: true,

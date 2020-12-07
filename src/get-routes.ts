@@ -1,6 +1,6 @@
-import type { Page, RouterConfig } from './router-config';
+import type { Page, RouterConfigObject } from './router-config';
 
-export default function getRoutes(config: RouterConfig): string[] {
+export default function getRoutes(config: RouterConfigObject): string[] {
   const getRoutesForPage = (prepend: string, page: Page | string): string[] => {
     if (typeof page === 'string') {
       return [prepend + '/' + page];

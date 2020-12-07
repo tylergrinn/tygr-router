@@ -1,21 +1,5 @@
 @use 'sass:string';
-@use 'sass:list';
 @use 'sass:map';
-
-@function str-replace($string, $search, $replace: '') {
-  $index: str-index($string, $search);
-
-  @if $index {
-    @return str-slice($string, 1, $index - 1) + $replace +
-      str-replace(
-        str-slice($string, $index + str-length($search)),
-        $search,
-        $replace
-      );
-  }
-
-  @return $string;
-}
 
 @function str-split($string, $sep) {
   $i: str-index($string, $sep);
@@ -50,4 +34,24 @@
   }
 
   @return nth($list, 1) + $sep + list-join(list-slice($list, 2), $sep);
+}
+
+@function partials($tokens) {
+  $partials: [];
+  $accumulator: '';
+
+  @if length($tokens) == 0 {
+    @return [];
+  }
+
+  @if nth($tokens, 1) == '' {
+    $tokens: list-slice($tokens, 2);
+  }
+
+  @each $token in $tokens {
+    $accumulator: $accumulator + '/' + $token;
+    $partials: append($partials, $accumulator);
+  }
+
+  @return $partials;
 }
