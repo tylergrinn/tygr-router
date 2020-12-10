@@ -2,6 +2,7 @@ import useSwitch from '@tygr/switch';
 import { useMemo } from 'react';
 import getRoute from './get-route';
 import getRoutes from './get-routes';
+import resolve from './resolve';
 import { RouterConfig, RouterConfigObject } from './router-config';
 import useEventListener from './use-event-listener';
 
@@ -15,8 +16,8 @@ export default function useRouter(
   const route = routes[flags.indexOf(true)];
 
   const handleRouteChange = () => {
-    const pathname = window.location.pathname.replace(config.baseUrl, '');
-    const route = getRoute(config, pathname);
+    const loc = window.location.pathname.replace(config.baseUrl, '');
+    const route = getRoute(config, loc);
 
     if (
       route !== config.fallback &&
@@ -29,10 +30,11 @@ export default function useRouter(
   useEventListener(window, 'popstate', handleRouteChange);
   useMemo(handleRouteChange, []);
 
-  const goto = (pathname: string) => () => {
-    const route = getRoute(config, pathname);
-    history.pushState(null, route, config.baseUrl + pathname);
-    setRoute(route)();
+  const goto = (to: string) => () => {
+    if (to.slice(0, 2) === '..') to = `../${to}`;
+    const newRoute = getRoute(config, resolve(route, to));
+    history.pushState(null, newRoute, config.baseUrl + newRoute);
+    setRoute(newRoute)();
   };
 
   return [router, goto, route];

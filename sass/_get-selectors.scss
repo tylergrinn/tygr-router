@@ -11,16 +11,16 @@
   }
 
   $selectors: '';
-  $partials: partials($tokens);
 
   // Recursively call child-selectors-helper with rest of tokens
-  $firstPartial: nth($partials, 1);
-  $newPrefix: "#{$prefix} [data-route~='~#{$firstPartial}']";
+  $newPrefix: "#{$prefix} [data-route~='~/#{nth($tokens, 1)}']";
   $selectors: $selectors + selectors-helper($newPrefix, list-slice($tokens, 2));
 
-  @for $i from 2 through length($tokens) {
-    $selectors: $selectors +
-      "#{$prefix} [data-route~='~#{nth($partials, $i)}'],";
+  // Select all of the partial paths
+  $partials: partials($tokens);
+
+  @for $i from 2 through length($partials) {
+    $selectors: "#{$selectors} #{$prefix} [data-route~='~#{nth($partials, $i)}'],";
   }
 
   @return $selectors;

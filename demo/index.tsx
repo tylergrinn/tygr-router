@@ -2,10 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import useRouter from '../lib';
 import './main.scss';
-import { router as routerConfig } from './router';
+import routerConfig from './router.json';
 
 function App() {
-  const [router, goto] = useRouter(routerConfig);
+  routerConfig.router.baseUrl = process.env.BASE_URL;
+  const [router, goto] = useRouter(routerConfig.router);
 
   return (
     <div>
@@ -31,11 +32,11 @@ function App() {
             <button onClick={goto('/non-existing-page')}>
               Fallback (/non-existing/page)
             </button>
-            <button onClick={goto('/absolute-redirect')}>
-              Absolute Redirect (/absolute-redirect)
+            <button onClick={goto('/redirect/absolute')}>
+              Absolute Redirect (/redirect/absolute)
             </button>
-            <button onClick={goto('/relative-redirect')}>
-              Relative Redirect (/relative-redirect)
+            <button onClick={goto('/redirect/relative')}>
+              Relative Redirect (/redirect/relative)
             </button>
           </div>
         </nav>
@@ -54,9 +55,6 @@ function App() {
             <span data-route="/i/j/k/k1">G-G-Child 2 (/i/j/k/k1)</span>
             <span data-route="/i/j/k/l/l0">G-G-G-Child 1 (/i/j/k/l/l0)</span>
             <span data-route="/i/j/k/l/l1">G-G-G-child 2 (/i/j/k/l/l1)</span>
-            <span data-route="/relative-redirect/child1">
-              Relative redirect (/relative-redirect/child1)
-            </span>
           </div>
 
           <div className="info-box max-width-md flex-col">
@@ -76,6 +74,9 @@ function App() {
               </p>
             </div>
             <div className="flex-wrap info-box" data-route="^/i">
+              <button className="hide" onClick={goto('../')}>
+                Go up (./)
+              </button>
               <h4>^/i</h4>
               <div className="flex-col max-width-md">
                 <span data-route="~/i1">Child 2 (~/i1)</span>
@@ -96,10 +97,20 @@ function App() {
                   <h4>~/k</h4>
                   <span data-route="~/k0">G-G-Child 1 (~/k0)</span>
                   <span data-route="~/k1">G-G-Child 2 (~/k1)</span>
+                  <button
+                    className="hide"
+                    data-route="/i/j/k/k0 /i/j/k/k1"
+                    onClick={goto('./l/l0')}
+                  >
+                    Relative button (./l/l0)
+                  </button>
                   <div className="info-box flex-wrap" data-route="~/l">
                     <h4>~/l</h4>
-                    <span data-route="~/l0 ~/l1">G-G-G-Child 1 (~/l0)</span>
+                    <span data-route="~/l0">G-G-G-Child 1 (~/l0)</span>
                     <span data-route="~/l1">G-G-G-Child 2 (~/l1)</span>
+                    <button className="hide" onClick={goto('../k1')}>
+                      Relative button (../k1)
+                    </button>
                   </div>
                 </div>
               </div>

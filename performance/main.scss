@@ -1,0 +1,8 @@
+@use '../' as router;
+@import 'router.js';
+
+.router {
+  @include router.router($router) {
+    display: none;
+  }
+}

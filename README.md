@@ -15,13 +15,22 @@ The router layout will share as much html as it can between the different routes
 - Limit DOM mutations\
   The most expensive part of any javascript framework is updating the DOM. This library instead compiles all possible routes to a css file. Instead of adding and removing elements, the css file will hide and show them as needed. The only DOM manipulation that occurs during a route change is a single attribute in the top most element of the router.
 - Smaller build for small projects\
-  The javascript footprint is trivial; most of the logic is in the generated css file. The largest factor to the size of the css is the level of the deepest route. For the project in the demo folder:
-  | deepest level | built css size |
-  | ------------- | -------- |
-  | (2) /i/i0 | 18 KB |
-  | (3) /i/j/j0 | 23 KB |
-  | (4) /i/j/k/k0 | 32 KB |
-  | (5) /i/j/k/l/l0 | 48 KB |
+  The javascript footprint is trivial; most of the logic is in the generated css file. The largest factor to the size of the css is the max depth rather than the number of routes:
+
+  | # of routes | depth | built css size |
+  | ----------- | ----- | -------------- |
+  | 1           | 1     | 178 B          |
+  | 20          | 1     | 3.24 KB        |
+  | 100         | 1     | 16.4 KB        |
+  | 20          | 2     | 5.81 KB        |
+  | 20          | 3     | 10.7 KB        |
+  | 20          | 4     | 20 KB          |
+  | 20          | 5     | 37.1 KB        |
+
+- Specify complex route logic for elements for more reuse\
+  The "starts with", partial, and exclusionary syntax can be used together to shorten jsx templates considerably. You can reuse the same component for multiple routes because no components are ever actually gone when the route changes.
+- Specify routes in child react components without global state\
+  Which elements show up on which routes can be specified at any depth of react components without having to importing anything and without knowing anything about the current route.
 
 ## Requirements:
 
@@ -40,7 +49,7 @@ npm i --save @tygr/router node-sass-json-importer
 
 The router needs to be defined exactly the same for your sass code and javascript. The easiest way to do that is to use the [node-sass-json-importer](https://www.npmjs.com/package/node-sass-json-importer) and define your router in a separate file that can be loaded by both sass and javascript. You can see an example of this in the `demo` folder.
 
-The router definition must export a variable named `router` or, if using json, have a top level key named `router`. Within that variable, the following properties are available:
+The router definition must export a variable named `router` or, if using json, have a top-level key named `router`. Within that variable, the following properties are available:
 
 _All absolute paths should begin with '/' and all relative paths should not_
 
@@ -50,7 +59,7 @@ _All absolute paths should begin with '/' and all relative paths should not_
 | -------- | -------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | baseUrl  | optional | absolute path          | The base path of your website. If your website is hosted on domain.com/my-site, you should use '/my-site' as the baseUrl |
 | fallback | optional | relative path          | This is the route that will be displayed if no other route matches the current url. Defaults to the baseUrl              |
-| pages    | required | (Page or string) array | The pages you want to show                                                                                               |
+| pages    | required | (Page or string) array | The pages you want to show.                                                                                              |
 
 _Pages can be specified by a string or by using the following interface_
 
@@ -68,7 +77,7 @@ Here is an example router config:
 module.exports.router = {
   fallback: '404',
   pages: [
-    '', // Use an empty string for the root page
+    '', // Sass requires the first page in a list to be a string
     'page-1',
     {
       path: 'page-2',
@@ -93,10 +102,10 @@ import useRouter from '@tygr/Router';
 import { router as routerConfig } from './router';
 
 export default function App() {
-  const [router, goto, currentRoute] = useRouter(routerConfig);
+  const [routerContainer, goto, currentRoute] = useRouter(routerConfig);
 
   return (
-    <div {...router} className="router">
+    <div {...routerContainer} className="router">
       ...
     </div>
   );
@@ -136,7 +145,25 @@ For elements you want to conditionally show or hide, add the `data-route` attrib
 <button onClick={goto('/login')}>Goto login</button>
 ```
 
-Use the `goto` higher order function returned from the `useRouter` hook in order to change routes on button click. The route must be absolute.
+Use the `goto` higher order function returned from the `useRouter` hook in order to change routes on button click.
+
+You may also use relative routes for goto, but keep in mind that it is relative to the current route. You probably only want to display a relative button on certain pages:
+
+```jsx
+<div>
+  <button data-route="/parent" onClick={goto('page-1/child-1')}>
+    Goto /parent/page-1/child-1
+  </button>
+
+  <button data-route="/parent/page-1" onClick={goto('./page-2')}>
+    Goto /parent/page-2
+  </button>
+
+  <button data-route="/parent/page-1/child-1" onClick={goto('../page-2')}>
+    Goto /parent/page-2
+  </button>
+</div>
+```
 
 # Optional syntaxes
 

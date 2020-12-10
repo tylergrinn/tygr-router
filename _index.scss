@@ -8,8 +8,15 @@
 @mixin router($config) {
   $routes: get-routes($config);
 
-  @include switch.switch('route', $routes...) {
-    @content;
+  @if (content-exists()) {
+    @include switch.switch('route', $routes...) {
+      @content;
+    }
+  } @else {
+    @include switch.switch('route', $routes...) {
+      display: none;
+      pointer-events: none;
+    }
   }
 
   @each $route in $routes {

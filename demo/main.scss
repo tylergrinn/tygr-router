@@ -1,7 +1,7 @@
 @use 'sass:color';
 @use '../' as router;
 
-@import 'router.js';
+@import 'router.json';
 
 .router {
   [data-route] span,
@@ -12,17 +12,23 @@
   }
 
   @include router.router($router) {
+    /*
+     * These styles are applied when the data-route
+     * attribute **DOES NOT** match the current route
+     */
     border-color: transparent;
-
     span {
       border-color: transparent;
     }
-
     &.red {
       border-color: red;
     }
-  }
 
+    &.hide,
+    .hide {
+      display: none;
+    }
+  }
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
@@ -30,6 +36,10 @@
 
 .blue {
   @include router.routeChild('/page2') {
+    /*
+     * These styles are applied to the parent selector (.blue)
+     * when the specified route(s) are active
+     */
     border: 4px solid blue;
   }
 }

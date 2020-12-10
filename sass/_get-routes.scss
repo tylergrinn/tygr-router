@@ -2,41 +2,173 @@
 @use 'sass:map';
 @use 'util' as *;
 
-@function get-routes-for-page($prepend, $page) {
-  @if $page == '' {
-    @return $prepend;
-  }
-
+@function get-routes-for-page($page, $prepend: '') {
+  $pathToken: '';
   @if type-of($page) == 'string' {
-    @return (quote($prepend + '/' + $page));
+    @return (quote($prepend + $page));
   } @else {
-    $path: $prepend + '/' + map-get($page, 'path');
+    $path: map-get($page, 'path');
+    $children: map-get($page, 'children');
 
-    @if map-get($page, 'children') {
+    @if not $children {
+      @return (quote($prepend));
+    } @else {
+      // Sass interprets a single value array as a single value
+      // so $pages here is the first and only page in the list
+      @if type-of($children) != 'list' {
+        @return get-routes-for-page($children, $prepend + $path);
+      }
+
       $routes: [];
-      @each $child in map-get($page, 'children') {
-        $routes: join($routes, get-routes-for-page($path, $child));
+      @each $child in $children {
+        $routes: join($routes, get-routes-for-page($child, $prepend + $path));
       }
       @return $routes;
-    } @else {
-      @return (quote($path));
     }
   }
+}
+
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i']
+  [data-route~='~/j']
+  [data-route~='~/k']
+  [data-route~='~/l']
+  [data-route~='~/l0'],
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i']
+  [data-route~='~/j']
+  [data-route~='~/k']
+  [data-route~='~/l']
+  [data-route~='~/l0']
+  span,
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i']
+  [data-route~='~/j']
+  [data-route~='~/k']
+  [data-route~='~/l/l0'],
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i']
+  [data-route~='~/j']
+  [data-route~='~/k']
+  [data-route~='~/l/l0']
+  span,
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i']
+  [data-route~='~/j']
+  [data-route~='~/k/l'],
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i']
+  [data-route~='~/j']
+  [data-route~='~/k/l']
+  span,
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i']
+  [data-route~='~/j']
+  [data-route~='~/k/l/l0'],
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i']
+  [data-route~='~/j']
+  [data-route~='~/k/l/l0']
+  span,
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i']
+  [data-route~='~/j/k'],
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i']
+  [data-route~='~/j/k']
+  span,
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i']
+  [data-route~='~/j/k/l'],
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i']
+  [data-route~='~/j/k/l']
+  span,
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i']
+  [data-route~='~/j/k/l/l0'],
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i']
+  [data-route~='~/j/k/l/l0']
+  span,
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i/j']
+  [data-route~='~/k']
+  [data-route~='~/l']
+  [data-route~='~/l0'],
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i/j']
+  [data-route~='~/k']
+  [data-route~='~/l']
+  [data-route~='~/l0']
+  span,
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i/j']
+  [data-route~='~/k']
+  [data-route~='~/l/l0'],
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i/j']
+  [data-route~='~/k']
+  [data-route~='~/l/l0']
+  span,
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i/j']
+  [data-route~='~/k/l'],
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i/j']
+  [data-route~='~/k/l']
+  span,
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i/j']
+  [data-route~='~/k/l/l0'],
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i/j']
+  [data-route~='~/k/l/l0']
+  span,
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i/j/k']
+  [data-route~='~/l']
+  [data-route~='~/l0'],
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i/j/k']
+  [data-route~='~/l']
+  [data-route~='~/l0']
+  span,
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i/j/k']
+  [data-route~='~/l/l0'],
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i/j/k']
+  [data-route~='~/l/l0']
+  span,
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i/j/k/l']
+  [data-route~='~/l0'],
+.router:not([data-route-state='/i/j/k/l/l0'])
+  [data-route~='^/i/j/k/l']
+  [data-route~='~/l0']
+  span {
+  border-color: transparent;
 }
 
 @function get-routes($config) {
   $routes: [];
 
   @if map-get($config, 'fallback') {
-    $routes: join($routes, '/' + map-get($config, 'fallback'));
+    $routes: join($routes, map-get($config, 'fallback'));
   }
 
-  @each $page in map-get($config, 'pages') {
-    @if $page == '' {
-      $routes: join($routes, '/');
-    } @else {
-      $routes: join($routes, get-routes-for-page('', $page));
-    }
+  $pages: map-get($config, 'pages');
+
+  @if type-of($pages) != 'list' {
+    // Sass interprets a single value array as a single value
+    // so $pages here is the first and only page in the list
+    $routes: get-routes-for-page($pages);
+    @return $routes;
+  }
+
+  @each $page in $pages {
+    $routes: join($routes, get-routes-for-page($page));
   }
 
   @return $routes;

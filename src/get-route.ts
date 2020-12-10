@@ -1,10 +1,11 @@
+import resolve from './resolve';
 import type { PageObject, RouterConfigObject } from './router-config';
 
 export default function getRoute(
   config: RouterConfigObject,
   pathname: string
 ): string {
-  const tokens = pathname.split('/').slice(1);
+  const tokens = pathname.split(/(?=\/)/g);
   let children: PageObject[] | undefined = config.pages;
   let route = '';
 
@@ -18,23 +19,17 @@ export default function getRoute(
     );
     if (!page) return config.fallback;
 
-    if (page.redirectTo)
-      return getRoute(
-        config,
-        page.redirectTo[0] === '/'
-          ? page.redirectTo
-          : route + '/' + page.redirectTo
-      );
+    if (page.redirectTo) return resolve(route, page.redirectTo);
 
     const LAST = i === tokens.length - 1;
 
     if (!page.children && !LAST) return config.fallback;
 
-    if (LAST && page.children && page.children.some((p) => p.path === '')) {
-      tokens.push('');
+    if (LAST && page.children && page.children.some((p) => p.path === '/')) {
+      tokens.push('/');
     }
 
-    route += '/' + page.path;
+    route += page.path;
 
     if (page.children) children = page.children;
     else return route;

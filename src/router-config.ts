@@ -23,10 +23,12 @@ export class PageObject {
 
   public constructor(page: Page | string) {
     if (typeof page === 'string') {
-      this.path = page;
+      this.path = page.replaceAll("'", '');
     } else {
-      this.path = page.path;
-      this.redirectTo = page.redirectTo;
+      this.path = page.path.replaceAll("'", '');
+      this.redirectTo = page.redirectTo
+        ? page.redirectTo.replaceAll("'", '')
+        : undefined;
       if (page.children) {
         this.children = page.children.map((c) => new PageObject(c));
       }
@@ -40,8 +42,8 @@ export class RouterConfigObject {
   public pages: PageObject[];
 
   public constructor(config: RouterConfig) {
-    this.baseUrl = config.baseUrl || '';
-    this.fallback = config.fallback ? `/${config.fallback}` : '';
+    this.baseUrl = config.baseUrl ? config.baseUrl.replaceAll("'", '') : '';
+    this.fallback = config.fallback ? config.fallback.replaceAll("'", '') : '/';
 
     this.pages = config.pages.map((p) => new PageObject(p));
   }

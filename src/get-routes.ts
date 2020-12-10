@@ -1,21 +1,18 @@
-import type { Page, RouterConfigObject } from './router-config';
+import type { PageObject, RouterConfigObject } from './router-config';
 
 export default function getRoutes(config: RouterConfigObject): string[] {
-  const getRoutesForPage = (prepend: string, page: Page | string): string[] => {
-    if (typeof page === 'string') {
-      return [prepend + '/' + page];
-    }
+  const getRoutesForPage = (page: PageObject, prepend: string): string[] => {
     if (page.children) {
       return page.children.reduce((routes, child) => {
-        routes.push(...getRoutesForPage(prepend + '/' + page.path, child));
+        routes.push(...getRoutesForPage(child, prepend + page.path));
         return routes;
       }, [] as string[]);
     }
 
-    return [prepend + '/' + page.path];
+    return [prepend + page.path];
   };
   return config.pages.reduce((routes, page) => {
-    routes.push(...getRoutesForPage('', page));
+    routes.push(...getRoutesForPage(page, ''));
     return routes;
   }, [] as string[]);
 }
