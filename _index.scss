@@ -1,63 +1,53 @@
-@use 'sass:list';
 @use 'sass:meta';
-@use 'sass/util' as *;
-@use 'sass/get-selectors' as *;
+@use 'sass:list';
+@use 'sass/router-helper' as *;
 @use 'sass/get-routes' as *;
-@use '@tygr/switch';
 
 @mixin router($config) {
   $routes: get-routes($config);
 
-  @if (content-exists()) {
-    @include switch.switch('route', $routes...) {
-      @content;
-    }
-  } @else {
-    @include switch.switch('route', $routes...) {
-      display: none;
-      pointer-events: none;
-    }
+  $pages: map-get($config, 'pages');
+
+  @if map-has-key($config, 'fallback') {
+    $pages: append($pages, map-get($config, 'fallback'));
   }
 
-  @each $route in $routes {
-    $childSelectors: get-child-selectors($route);
-
-    @if $childSelectors != '' {
-      &:not([data-route-state='#{$route}']) {
-        #{$childSelectors} {
-          @if (content-exists()) {
-            // Let mixin consumer override default inactive state styles
-            @content;
-          } @else {
-            display: none;
-            pointer-events: none;
-          }
-        }
-      }
-    }
-  }
-
-  $parentSelectors: '';
-  $parentRoutes: get-parent-routes($routes);
-  @each $parent in $parentRoutes {
-    $parentSelectors: $parentSelectors + get-parent-selectors($parent);
-  }
-
-  @if $parentSelectors != '' {
-    #{$parentSelectors} {
-      @if (content-exists()) {
-        // Let mixin consumer override default inactive state styles
+  @if type-of($pages) != 'list' {
+    @if content-exists() {
+      @include router-helper($pages) {
         @content;
-      } @else {
+      }
+    } @else {
+      @include router-helper($pages) {
         display: none;
         pointer-events: none;
+      }
+    }
+  } @else {
+    @each $page in $pages {
+      @if content-exists() {
+        @include router-helper($page) {
+          @content;
+        }
+      } @else {
+        @include router-helper($page) {
+          display: none;
+          pointer-events: none;
+        }
       }
     }
   }
 }
 
 @mixin routeChild($routes...) {
-  @include switch.switchChild('route', $routes...) {
-    @content;
+  $selectors: '';
+  @each $route in $routes {
+    $selectors: $selectors + "[data-route-state='#{$route}'] &,";
+  }
+
+  @if $selectors != '' {
+    #{$selectors} {
+      @content;
+    }
   }
 }

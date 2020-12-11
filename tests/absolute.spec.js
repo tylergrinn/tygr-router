@@ -1,7 +1,7 @@
 const { serve, writeTestCase, assertVisible, assertHidden } = require('./util');
 
 describe('Absolute routes', () => {
-  const router = { pages: ['/a', '/b', '/c'] };
+  const router = { pages: ["'/a'", "'/b'", "'/c'"] };
   const tests = ['/a', '/b', '/c'];
 
   let closeServer;

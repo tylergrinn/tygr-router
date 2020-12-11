@@ -16,6 +16,8 @@ export interface Route {
   query: URLSearchParams;
 }
 
+const unescape = (str: string) => str.replace(/['"]/g, '');
+
 export class PageObject {
   public path: string;
   public children?: PageObject[];
@@ -23,12 +25,10 @@ export class PageObject {
 
   public constructor(page: Page | string) {
     if (typeof page === 'string') {
-      this.path = page.replaceAll("'", '');
+      this.path = unescape(page);
     } else {
-      this.path = page.path.replaceAll("'", '');
-      this.redirectTo = page.redirectTo
-        ? page.redirectTo.replaceAll("'", '')
-        : undefined;
+      this.path = unescape(page.path);
+      this.redirectTo = page.redirectTo ? unescape(page.redirectTo) : undefined;
       if (page.children) {
         this.children = page.children.map((c) => new PageObject(c));
       }
@@ -42,8 +42,8 @@ export class RouterConfigObject {
   public pages: PageObject[];
 
   public constructor(config: RouterConfig) {
-    this.baseUrl = config.baseUrl ? config.baseUrl.replaceAll("'", '') : '';
-    this.fallback = config.fallback ? config.fallback.replaceAll("'", '') : '/';
+    this.baseUrl = config.baseUrl ? unescape(config.baseUrl) : '';
+    this.fallback = config.fallback ? unescape(config.fallback) : '/';
 
     this.pages = config.pages.map((p) => new PageObject(p));
   }

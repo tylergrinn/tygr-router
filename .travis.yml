@@ -5,6 +5,7 @@ node_js: lts/*
 
 script:
   - npm run quality:check
+  - npm test
   - NODE_ENV=production GITHUB_PAGES=true npm run build
 
 deploy:

@@ -25,10 +25,6 @@ export default function getRoute(
 
     if (!page.children && !LAST) return config.fallback;
 
-    if (LAST && page.children && page.children.some((p) => p.path === '/')) {
-      tokens.push('/');
-    }
-
     route += page.path;
 
     if (page.children) children = page.children;

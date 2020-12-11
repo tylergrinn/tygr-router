@@ -1,0 +1,124 @@
+@use 'util' as *;
+@use 'sass:list';
+@use 'sass:selector';
+@use 'sass:string';
+@use 'sass:map';
+
+@function get-child-selectors($path) {
+  $tokens: str-split($path, '/');
+  $partials: partials($tokens);
+
+  $selector: '[data-route]';
+
+  @each $partial in partials($tokens, true) {
+    $selector: $selector +
+      ":not([data-route~='^#{$partial}'])" +
+      ":not([data-route~='#{$partial}'])";
+  }
+
+  @return $selector;
+}
+
+@function get-final-selectors($path) {
+  $selector: selector-append(
+    '[data-route]',
+    ":not([data-route*='!'])",
+    ":not([data-route~='#{$path}'])"
+  );
+
+  $tokens: list-slice(str-split($path, '/'), 2);
+  $tokens: set-nth($tokens, 1, '/' + nth($tokens, 1));
+
+  $partials: partials($tokens);
+
+  @each $partial in $partials {
+    $selector: selector-append($selector, ":not([data-route~='^#{$partial}'])");
+  }
+
+  @return $selector;
+}
+
+@mixin child-selectors($path) {
+  $tokens: list-slice(str-split($path, '/'), 2);
+  @if length($tokens) > 1 {
+    $childPath: str-slice($path, length(nth($tokens, 1)) + 2);
+    $relPath: str-slice($childPath, 2);
+
+    &#{get-child-selectors($relPath)} {
+      @content;
+
+      @include child-selectors($childPath) {
+        @content;
+      }
+    }
+  } @else {
+    @content;
+  }
+}
+
+@mixin exclusion-selectors($path) {
+  $selectors: "[data-route~='!#{$path}'],";
+  $children: '';
+
+  $tokens: str-split($path, '/');
+  @if length($tokens) > 1 and nth($tokens, 1) == '' {
+    $tokens: list-slice($tokens, 2);
+    $tokens: set-nth($tokens, 1, '/' + nth($tokens, 1));
+  }
+  $partials: partials($tokens);
+
+  @for $i from 1 through length($partials) {
+    $partial: nth($partials, $i);
+    $selectors: $selectors + "[data-route~='!^#{$partial}'],";
+
+    @if $i < length($tokens) {
+      $tailTokens: list-slice($tokens, $i + 1);
+      $childPath: path-join($tailTokens);
+      [data-route~='^#{$partial}'] {
+        @include exclusion-selectors($childPath) {
+          @content;
+        }
+      }
+    }
+  }
+
+  #{$selectors} {
+    @content;
+  }
+}
+
+@mixin router-helper($page, $path: '') {
+  $children: [];
+  @if type-of($page) == 'string' {
+    $path: $path + $page;
+  } @else {
+    $path: $path + map-get($page, 'path');
+    @if map-has-key($page, 'children') {
+      $children: map-get($page, 'children');
+    }
+  }
+
+  &[data-route-state='#{$path}'] {
+    @include exclusion-selectors($path) {
+      @content;
+    }
+
+    #{get-final-selectors($path)} {
+      @include child-selectors($path) {
+        @content;
+      }
+    }
+  }
+
+  @if type-of($children) != 'list' {
+    @include router-helper($children, $path) {
+      @content;
+    }
+  } @else {
+    @each $child in $children {
+      @include router-helper($child, $path) {
+        @content;
+      }
+    }
+  }
+}

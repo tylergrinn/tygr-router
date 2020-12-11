@@ -17,18 +17,19 @@ The router layout will share as much html as it can between the different routes
 - Smaller build for small projects\
   The javascript footprint is trivial; most of the logic is in the generated css file. The largest factor to the size of the css is the max depth rather than the number of routes:
 
-  | # of routes | depth | built css size |
-  | ----------- | ----- | -------------- |
-  | 1           | 1     | 178 B          |
-  | 20          | 1     | 3.24 KB        |
-  | 100         | 1     | 16.4 KB        |
-  | 20          | 2     | 5.81 KB        |
-  | 20          | 3     | 10.7 KB        |
-  | 20          | 4     | 20 KB          |
-  | 20          | 5     | 37.1 KB        |
+  | # of routes  | depth | css (gzipped) |
+  | ------------ | ----- | ------------- |
+  | 1            | 1     | 122 B         |
+  | 20           | 1     | 415 B         |
+  | 100          | 1     | 1.70 KB       |
+  | 20           | 2     | 752 B         |
+  | 20           | 3     | 1.36 KB       |
+  | 20           | 4     | 2.57 KB       |
+  | 20           | 5     | 5.22 KB       |
+  | Demo project | 4     | 4.12 KB       |
 
 - Specify complex route logic for elements for more reuse\
-  The "starts with", partial, and exclusionary syntax can be used together to shorten jsx templates considerably. You can reuse the same component for multiple routes because no components are ever actually gone when the route changes.
+  The relative, partial, and exclusionary syntax can be used together to shorten jsx templates considerably. You can reuse the same component for multiple routes because no components are ever actually gone when the route changes.
 - Specify routes in child react components without global state\
   Which elements show up on which routes can be specified at any depth of react components without having to importing anything and without knowing anything about the current route.
 
@@ -47,18 +48,16 @@ npm i --save @tygr/router node-sass-json-importer
 
 ## Step 1: Define your router
 
-The router needs to be defined exactly the same for your sass code and javascript. The easiest way to do that is to use the [node-sass-json-importer](https://www.npmjs.com/package/node-sass-json-importer) and define your router in a separate file that can be loaded by both sass and javascript. You can see an example of this in the `demo` folder.
+The router needs to be defined exactly the same for your sass code and javascript. The easiest way to do that is to use the [node-sass-json-importer](https://www.npmjs.com/package/node-sass-json-importer) and define your router in a separate file that can be loaded by both sass and javascript. You can see an example of this in the `demo` folder. If using the importer, strings must be escaped by single quotes, ie `"'/page'"` rather than `"/page"`.
 
 The router definition must export a variable named `router` or, if using json, have a top-level key named `router`. Within that variable, the following properties are available:
-
-_All absolute paths should begin with '/' and all relative paths should not_
 
 **Router**
 
 | property | required | type                   | description                                                                                                              |
 | -------- | -------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| baseUrl  | optional | absolute path          | The base path of your website. If your website is hosted on domain.com/my-site, you should use '/my-site' as the baseUrl |
-| fallback | optional | relative path          | This is the route that will be displayed if no other route matches the current url. Defaults to the baseUrl              |
+| baseUrl  | optional | string                 | The base path of your website. If your website is hosted on domain.com/my-site, you should use '/my-site' as the baseUrl |
+| fallback | optional | string                 | This is the route that will be displayed if no other route matches the current url. Defaults to the baseUrl              |
 | pages    | required | (Page or string) array | The pages you want to show.                                                                                              |
 
 _Pages can be specified by a string or by using the following interface_
@@ -67,7 +66,7 @@ _Pages can be specified by a string or by using the following interface_
 
 | property   | required | type                      | description                                                                 |
 | ---------- | -------- | ------------------------- | --------------------------------------------------------------------------- |
-| path       | required | relative path             | The name of the route                                                       |
+| path       | required | string                    | The name of the route                                                       |
 | redirectTo | optional | relative or absolute path | If a user reaches this page, they will be redirected to the redirectTo url. |
 | children   | optional | (Page or string) array    | Any children pages that this page has                                       |
 
@@ -75,20 +74,20 @@ Here is an example router config:
 
 ```js
 module.exports.router = {
-  fallback: '404',
+  fallback: "'/404'",
   pages: [
-    '', // Sass requires the first page in a list to be a string
-    'page-1',
+    "'/'", // Home page
+    "'/page-1'",
     {
-      path: 'page-2',
+      path: "'/page-2'",
       children: {
-        'child-1',
-        'child-2',
+        "'/child-1'",
+        "'/child-2'",
       }
     },
     {
-      path: 'redirect',
-      redirectTo: '/page-2/child-2', // Could also relative path: 'page-2/child-2'
+      path: "'/redirect'",
+      redirectTo: "'/page-2/child-2'", // Could also relative path: 'page-2/child-2'
     }
   ]
 };
@@ -169,49 +168,21 @@ You may also use relative routes for goto, but keep in mind that it is relative 
 
 In addition to the absolute paths, you can use these operators in the `data-route` attribute to handle more complex logic
 
-| name          | usage   | description                                                                                                                                                      |
-| ------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| "starts with" | ^/route | display an element on all paths that begin with '/route'                                                                                                         |
-| partial       | ~/child | Use the nearest parent `data-route` attribute and append this route to it when determining whether to display the element. Useful for avoiding typing long paths |
-| exclusionary  | !/route | display an element on all paths that don't match /route.                                                                                                         |
+| name         | usage                    | description                                                                                                                                                      |
+| ------------ | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| partial      | ^/route                  | display an element on all paths that begin with '/route'                                                                                                         |
+| relative     | child (no forward slash) | Use the nearest parent `data-route` attribute and append this route to it when determining whether to display the element. Useful for avoiding typing long paths |
+| exclusionary | !/route                  | display an element on all paths that don't match /route.                                                                                                         |
 
-## "Starts with" syntax `[^]`
+## Partial syntax `[^]`
 
 ```jsx
 <span data-route="^/route">Display on all routes that start with /route</span>
 ```
 
-The "starts with" syntax only works on full path tokens. What that means is that `^/route` will not match `/routeeee` but will match `/route/eee`
+The partial syntax only works on full path tokens. What that means is that `^/route` will not match `/routeeee` but will match `/route/eee`
 
-This syntax can be combined with other "starts with" routes or absolute paths in a single `data-route` attribute.
-
-## Partial syntax `[~]`
-
-```jsx
-<div data-route="^/some/long/route">
-  <span data-route="~/child1">Child 1</span>
-  <span data-route="/some/long/route/child1">Equivalent, but more verbose</span>
-</div>
-```
-
-If you are using a "starts with" syntax to display child routes, any child of that element can piggy back off the route specified by the parent rather than having to specify a full absolute path.
-
-The partial syntax is recursive: grandchildren can use the path of their parent partial `data-route` attribute.
-
-```jsx
-<div data-route="^/parent">
-  <div data-route="~/child">
-    <span data-route="~/grandchild">
-      Display when route is /parent/child/grandchild
-    </span>
-    <span data-route="/parent/child/grandchild">
-      Equivalent, but more verbose
-    </span>
-  </div>
-</div>
-```
-
-This syntax is exclusive: only a single route can be specified for an element with a partial.
+This syntax can be combined with other partial routes or absolute paths in a single `data-route` attribute.
 
 ## Exclusionary syntax `[!]`
 
@@ -224,6 +195,45 @@ This syntax is exclusive: only a single route can be specified for an element wi
 By using the `!` operator, you can exclude an element from a certain route rather than the default additive behavior.
 
 This syntax takes precedence: if a single route is specified with `!`, any absolute routes that are also specified for that element will be ignored.
+
+## Relative
+
+```jsx
+<div data-route="^/some/long/route">
+  <span data-route="child1">Child 1</span>
+  <span data-route="/some/long/route/child1">Equivalent, but more verbose</span>
+</div>
+```
+
+If you are using a partial syntax to display child routes, any child of that element can piggy back off the route specified by the parent rather than having to specify a full absolute path.
+
+You can use any of the other syntaxes in conjunction with relative routes:
+
+```jsx
+<div data-route="^/parent">
+  <span data-route="^child">Display when route begings with /parent/child</span>
+  <span data-route="!other-child">
+    Display when route begins with /parent and does not include other-child
+  </span>
+</div>
+```
+
+The partial syntax is recursive: grandchildren can use the path of their parent partial `data-route` attribute.
+
+```jsx
+<div data-route="^/parent">
+  <div data-route="^child">
+    <span data-route="grandchild">
+      Display when route is /parent/child/grandchild
+    </span>
+    <span data-route="/parent/child/grandchild">
+      Equivalent, but more verbose
+    </span>
+  </div>
+</div>
+```
+
+Just remember that the top level element in this pattern must always use an absolute partial path.
 
 # Use custom css for route transitions
 

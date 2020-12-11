@@ -5,9 +5,9 @@ const { getPages, getExcelColumns } = require('./util');
 // })();
 
 // module.exports.router = { pages: getPages(getExcelColumns(1), 1) };
-module.exports.router = { pages: getPages(getExcelColumns(3), 3) };
+// module.exports.router = { pages: getPages(getExcelColumns(20), 1) };
 // module.exports.router = { pages: getPages(getExcelColumns(100), 1) };
 // module.exports.router = { pages: getPages(getExcelColumns(20), 2) };
 // module.exports.router = { pages: getPages(getExcelColumns(20), 3) };
 // module.exports.router = { pages: getPages(getExcelColumns(20), 4) };
-// module.exports.router = { pages: getPages(getExcelColumns(20), 5) };
+module.exports.router = { pages: getPages(getExcelColumns(20), 5) };

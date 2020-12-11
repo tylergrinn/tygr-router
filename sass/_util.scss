@@ -24,34 +24,42 @@
   @return $result;
 }
 
-@function list-join($list, $sep) {
-  @if length($list) < 1 {
-    @return '';
-  }
-
-  @if length($list) < 2 {
-    @return nth($list, 1);
-  }
-
-  @return nth($list, 1) + $sep + list-join(list-slice($list, 2), $sep);
-}
-
-@function partials($tokens) {
-  $partials: [];
-  $accumulator: '';
-
+@function partials($tokens, $all: false) {
   @if length($tokens) == 0 {
     @return [];
   }
 
-  @if nth($tokens, 1) == '' {
-    $tokens: list-slice($tokens, 2);
-  }
+  $partials: (nth($tokens, 1));
 
-  @each $token in $tokens {
-    $accumulator: $accumulator + '/' + $token;
-    $partials: append($partials, $accumulator);
+  @if length($tokens) > 1 {
+    $accumulator: nth($tokens, 1);
+    $tokens: list-slice($tokens, 2);
+
+    @each $token in $tokens {
+      $accumulator: $accumulator + '/' + $token;
+      $partials: append($partials, $accumulator);
+    }
+
+    @if $all {
+      $partials: join($partials, partials($tokens, $all));
+    }
   }
 
   @return $partials;
+}
+
+@function path-join($tokens) {
+  @if length($tokens) == 0 {
+    @return '';
+  }
+
+  $result: nth($tokens, 1);
+
+  @if length($tokens) > 1 {
+    @for $i from 2 through length($tokens) {
+      $result: '#{$result}/#{nth($tokens, $i)}';
+    }
+  }
+
+  @return $result;
 }
