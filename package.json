@@ -6,7 +6,8 @@
   "types": "lib/index.d.ts",
   "files": [
     "lib",
-    "sass"
+    "sass",
+    "_index.scss"
   ],
   "browserslist": [
     "defaults"
