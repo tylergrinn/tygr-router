@@ -31,7 +31,6 @@ export default function useRouter(
   useMemo(handleRouteChange, []);
 
   const goto = (to: string) => () => {
-    console.log('Route', route);
     if (to.slice(0, 2) === '..') to = `../${to}`;
     const newRoute = getRoute(config, resolve(route, to));
     history.pushState(null, newRoute, config.baseUrl + newRoute);
