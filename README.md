@@ -31,7 +31,7 @@ The router layout will share as much html as it can between the different routes
 - Specify complex route logic for elements for more reuse\
   The relative, partial, and exclusionary syntax can be used together to shorten jsx templates considerably. You can reuse the same component for multiple routes because no components are ever actually gone when the route changes.
 - Specify routes in child react components without global state\
-  Which elements show up on which routes can be specified at any depth of react components without having to importing anything and without knowing anything about the current route.
+  Which elements show up on which routes can be specified at any depth of react components without having to import anything and without knowing anything about the current route.
 
 ## Requirements:
 
@@ -119,7 +119,7 @@ Spread the router container object returned from the `useRouter` hook over the p
 
 ```scss
 @use '@tygr/router';
-@import 'router.js';
+@import 'router.js'; // Import the router you defined in step 1
 
 .router {
   @include router.router($router);
@@ -170,19 +170,9 @@ In addition to the absolute paths, you can use these operators in the `data-rout
 
 | name         | usage                    | description                                                                                                                                                      |
 | ------------ | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| partial      | ^/route                  | display an element on all paths that begin with '/route'                                                                                                         |
-| relative     | child (no forward slash) | Use the nearest parent `data-route` attribute and append this route to it when determining whether to display the element. Useful for avoiding typing long paths |
 | exclusionary | !/route                  | display an element on all paths that don't match /route.                                                                                                         |
-
-## Partial syntax `[^]`
-
-```jsx
-<span data-route="^/route">Display on all routes that start with /route</span>
-```
-
-The partial syntax only works on full path tokens. What that means is that `^/route` will not match `/routeeee` but will match `/route/eee`
-
-This syntax can be combined with other partial routes or absolute paths in a single `data-route` attribute.
+| partial      | ^/route                  | display an element on all paths that begin with '/route'                                                                                                         |
+| relative     | route (no forward slash) | Use the nearest parent `data-route` attribute and append this route to it when determining whether to display the element. Useful for avoiding typing long paths |
 
 ## Exclusionary syntax `[!]`
 
@@ -195,6 +185,22 @@ This syntax can be combined with other partial routes or absolute paths in a sin
 By using the `!` operator, you can exclude an element from a certain route rather than the default additive behavior.
 
 This syntax takes precedence: if a single route is specified with `!`, any absolute routes that are also specified for that element will be ignored.
+
+## Partial syntax `[^]`
+
+```jsx
+<span data-route="^/route">Display on all routes that start with /route</span>
+```
+
+The partial syntax only works on full path tokens. What that means is that `^/route` will not match `/routeeee` but will match `/route/eee`
+
+This syntax can be combined with other partial routes or absolute paths in a single `data-route` attribute. You can also combine the partial and exclusionary syntax `[!^]`:
+
+```jsx
+<span data-route="!^/route">
+  Display on all routes that do not start with /route
+</span>
+```
 
 ## Relative
 
@@ -211,9 +217,12 @@ You can use any of the other syntaxes in conjunction with relative routes:
 
 ```jsx
 <div data-route="^/parent">
-  <span data-route="^child">Display when route begings with /parent/child</span>
+  <span data-route="^child">Display when route begins with /parent/child</span>
   <span data-route="!other-child">
     Display when route begins with /parent and does not include other-child
+  </span>
+  <span data-route="!^child">
+    Display when route begins with /parent but does not begin with /parent/child
   </span>
 </div>
 ```
