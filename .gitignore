@@ -4,6 +4,7 @@ node_modules
 debug.log
 .env
 .vscode
+.sass-cache
 
 /performance/output
 /tests/output
