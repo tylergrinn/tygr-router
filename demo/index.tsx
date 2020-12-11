@@ -80,7 +80,7 @@ function App() {
                 </div>
               </div>
               <div className="info-box max-width-md flex-wrap" data-route="^j">
-                <h4>j</h4>
+                <h4>^j</h4>
                 <span data-route="j0">G-Child 1 (j0)</span>
                 <span data-route="j1">G-Child 2 (j1)</span>
                 <span data-route="!j0">Not G-Child 1 (!j0)</span>
@@ -92,7 +92,7 @@ function App() {
                   Relative button (./k/k0)
                 </button>
                 <div className="info-box flex-wrap" data-route="^k">
-                  <h4>k</h4>
+                  <h4>^k</h4>
                   <span data-route="k0">G-G-Child 1 (k0)</span>
                   <span data-route="k1">G-G-Child 2 (k1)</span>
                   <button

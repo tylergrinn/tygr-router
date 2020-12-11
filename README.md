@@ -168,11 +168,15 @@ You may also use relative routes for goto, but keep in mind that it is relative 
 
 In addition to the absolute paths, you can use these operators in the `data-route` attribute to handle more complex logic
 
-| name         | usage                    | description                                                                                                                                                      |
-| ------------ | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| exclusionary | !/route                  | display an element on all paths that don't match /route.                                                                                                         |
-| partial      | ^/route                  | display an element on all paths that begin with '/route'                                                                                                         |
-| relative     | route (no forward slash) | Use the nearest parent `data-route` attribute and append this route to it when determining whether to display the element. Useful for avoiding typing long paths |
+| name                       | usage                    | description                                                                                                                                                      |
+| -------------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| exclusionary               | !/route                  | display an element on all paths that don't match /route.                                                                                                         |
+| partial                    | ^/route                  | display an element on all paths that begin with '/route'                                                                                                         |
+| partial exclusion          | !^/route                 | Show on all routes that don't start with '/route'                                                                                                                |
+| relative                   | route (no forward slash) | Use the nearest parent `data-route` attribute and append this route to it when determining whether to display the element. Useful for avoiding typing long paths |
+| relative exclusion         | !route                   | Same as exclusionary, but prepend nearest parent `data-route` when determining whether to display the element                                                    |
+| partial relative           | ^route                   | Same as partial, but prepend nearest parent `data-route` when determining whether to display the element                                                         |
+| partial relative exclusion | !^route                  | Same as partial exclusion, but prepend nearest parent `data-route` when determining whether to display the element.                                              |
 
 ## Exclusionary syntax `[!]`
 
@@ -202,7 +206,7 @@ This syntax can be combined with other partial routes or absolute paths in a sin
 </span>
 ```
 
-## Relative
+## Relative syntax
 
 ```jsx
 <div data-route="^/some/long/route">
