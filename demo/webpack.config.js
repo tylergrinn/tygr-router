@@ -9,7 +9,7 @@ const webpack = require('webpack');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const PROD = process.env.NODE_ENV === 'production';
-const { GITHUB_PAGES, HTTP_SERVER, ANALYZE } = process.env;
+const { GITHUB_PAGES, HTTP_SERVER, ANALYZE, BASE_URL } = process.env;
 
 const HTML_FILENAME =
   PROD && (GITHUB_PAGES || HTTP_SERVER) ? '404.html' : 'index.html';
@@ -19,7 +19,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, '..', 'dist'),
     filename: '[name].[contenthash].js',
-    publicPath: '/',
+    publicPath: BASE_URL || '/',
   },
   mode: PROD ? 'production' : 'development',
   module: {
